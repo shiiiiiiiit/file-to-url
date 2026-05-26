@@ -9,7 +9,7 @@ A skill for AI coding assistants (Claude Code, OpenCode, etc.) that uploads a lo
 ### Claude Code
 
 ```bash
-npx skills add https://github.com/<your-username>/file-to-url --skill file-to-url -y
+npx skills add https://github.com/shiiiiiiiit/file-to-url --skill file-to-url -y
 ```
 
 Then configure with your API credentials:
