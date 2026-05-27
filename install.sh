@@ -45,6 +45,9 @@ if [ ! -d "$SKILL_DIR" ]; then
     exit 1
 fi
 
+echo "Cleaning up non-skill files..."
+rm -f "$SKILL_DIR/.gitignore" "$SKILL_DIR/README.md" "$SKILL_DIR/install.sh" "$SKILL_DIR/install.ps1"
+
 echo "Configuring API credentials..."
 python3 "$SKILL_DIR/setup.py" --api-url="$API_URL" --api-key="$API_KEY"
 

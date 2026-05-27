@@ -25,6 +25,9 @@ if (-not (Test-Path $SkillDir)) {
     exit 1
 }
 
+Write-Host "Cleaning up non-skill files..."
+Remove-Item -Force -ErrorAction SilentlyContinue "$SkillDir\.gitignore", "$SkillDir\README.md", "$SkillDir\install.sh", "$SkillDir\install.ps1"
+
 Write-Host "Configuring API credentials..."
 python "$SkillDir\setup.py" --api-url="$ApiUrl" --api-key="$ApiKey"
 

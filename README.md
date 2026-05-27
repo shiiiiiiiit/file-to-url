@@ -13,13 +13,13 @@ One command to install **and** configure:
 **macOS / Linux:**
 
 ```bash
-bash <(curl -sSL https://github.com/shiiiiiiiit/file-to-url/blob/main/install.sh) --api-url=https://your-api.com/upload --api-key=your-api-key
+bash <(curl -sSL https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/main/install.sh) --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-iwr https://github.com/shiiiiiiiit/file-to-url/blob/main/install.ps1 | iex -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'
+$tmp="$env:TEMP\install-file-to-url.ps1"; iwr -Uri https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/main/install.ps1 -OutFile $tmp; & $tmp -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'; Remove-Item $tmp
 ```
 
 Or clone and run locally:
