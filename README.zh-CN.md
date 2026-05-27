@@ -89,6 +89,10 @@ python .opencode/commands/setup.py --api-url=https://your-api.com/upload --api-k
 
 助手将上传文件并返回公开 URL。
 
+### 意图识别
+
+此技能也支持自动触发——当 AI 助手检测到工具、MCP 或 API 需要一个 `http`/`https` URL，但用户只有本地文件时（例如：生图 MCP 需要传入参考图片的 URL），助手会自动通过此技能上传本地文件，将返回的 URL 传入目标工具，无需用户显式输入 `/file-to-url` 命令。
+
 ## API 契约
 
 该技能期望远程 API 满足以下条件：
