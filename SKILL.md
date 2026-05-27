@@ -1,6 +1,6 @@
 ---
 name: file-to-url
-description: "Upload a local file to a remote service and get a public URL. Trigger: /file-to-url"
+description: "Upload a local file to a remote service and get a public URL. Explicit trigger: /file-to-url. Auto-trigger: when a tool/API/MCP requires an http(s) URL but only a local file path is available."
 trigger: /file-to-url
 ---
 
@@ -13,6 +13,22 @@ Upload a local file to a remote service and return a public URL.
 ```
 /file-to-url <file_path>
 ```
+
+## Auto-trigger (intent recognition)
+
+Use this skill automatically (without waiting for `/file-to-url`) when:
+
+- A tool, MCP, or API parameter requires an `http`/`https` URL, but the user only has a local file path
+- The user expresses intent like "I have this image locally", "use this local file as reference", "this file is on my machine", etc.
+- You need to pass a file to a remote service that only accepts URLs
+
+When you detect such intent, run the upload directly:
+
+```powershell
+python SKILL_DIR/upload_file.py "<local_file_path>"
+```
+
+Then pass the returned URL to the target tool — no need for the user to type `/file-to-url` explicitly.
 
 ## First-time setup
 
