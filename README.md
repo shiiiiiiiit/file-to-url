@@ -13,13 +13,13 @@ One command to install **and** configure:
 **macOS / Linux:**
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/main/install.sh) --api-url=https://your-api.com/upload --api-key=your-api-key
+bash <(curl -sSL https://github.com/shiiiiiiiit/file-to-url/blob/main/install.sh) --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
 **Windows (PowerShell):**
 
 ```powershell
-iwr https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/raw/main/install.ps1 | iex -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'
+iwr https://github.com/shiiiiiiiit/file-to-url/blob/main/install.ps1 | iex -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'
 ```
 
 Or clone and run locally:
