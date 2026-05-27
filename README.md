@@ -89,6 +89,10 @@ In your AI assistant, type:
 
 The assistant will upload the file and return a public URL.
 
+### Intent recognition
+
+The skill also triggers automatically when the AI assistant detects that a tool, MCP, or API requires an `http`/`https` URL but the user only has a local file — for example, an image generation MCP that needs a reference image URL. In such cases, the assistant uploads the local file via this skill and passes the resulting URL to the target tool, without requiring an explicit `/file-to-url` command.
+
 ## API contract
 
 The skill expects a remote API that:
