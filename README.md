@@ -6,15 +6,53 @@ A skill for AI coding assistants (Claude Code, OpenCode, etc.) that uploads a lo
 
 ## Install
 
-### Claude Code
+### Quick install (recommended)
+
+One command to install **and** configure:
+
+**macOS / Linux:**
 
 ```bash
-npx skills add https://github.com/shiiiiiiiit/file-to-url --skill file-to-url -y
+bash <(curl -sSL https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/main/install.sh) --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
-Then configure with your API credentials:
+**Windows (PowerShell):**
+
+```powershell
+iwr https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/raw/main/install.ps1 | iex -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'
+```
+
+Or clone and run locally:
 
 ```bash
+# macOS / Linux
+bash install.sh --api-url=https://your-api.com/upload --api-key=your-api-key
+
+# Windows (PowerShell)
+.\install.ps1 -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'
+```
+
+### Environment variables
+
+Set `FILE_TO_URL_API_URL` and `FILE_TO_URL_API_KEY` before launching Claude Code. The skill reads them at runtime if no config file exists — no `setup.py` needed.
+
+```bash
+# macOS / Linux
+export FILE_TO_URL_API_URL=https://your-api.com/upload
+export FILE_TO_URL_API_KEY=your-api-key
+
+# Windows (PowerShell)
+$env:FILE_TO_URL_API_URL = 'https://your-api.com/upload'
+$env:FILE_TO_URL_API_KEY = 'your-api-key'
+```
+
+### Manual install + configure
+
+```bash
+# Step 1: Install the skill
+npx skills add https://github.com/shiiiiiiiit/file-to-url --skill file-to-url -y
+
+# Step 2: Configure API credentials
 # Windows
 python %USERPROFILE%\.claude\skills\file-to-url\setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
 
@@ -22,15 +60,7 @@ python %USERPROFILE%\.claude\skills\file-to-url\setup.py --api-url=https://your-
 python ~/.claude/skills/file-to-url/setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
-### One-liner install + configure
-
-```bash
-# Windows (PowerShell)
-npx skills add https://github.com/<your-username>/file-to-url --skill file-to-url -y; python "$env:USERPROFILE\.claude\skills\file-to-url\setup.py" --api-url=https://your-api.com/upload --api-key=your-api-key
-
-# macOS / Linux
-npx skills add https://github.com/<your-username>/file-to-url --skill file-to-url -y && python ~/.claude/skills/file-to-url/setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
-```
+`setup.py` also reads environment variables as defaults when `--api-url` / `--api-key` flags are omitted.
 
 ### OpenCode
 
@@ -68,12 +98,12 @@ The skill expects a remote API that:
 
 ## Configuration
 
-Config is stored in `config.json` (inside the skill directory), **not** in environment variables.
+Config is stored in `config.json` (inside the skill directory). Environment variables are used as a fallback when `config.json` is missing or has empty values.
 
-| Field | Description |
-|-------|-------------|
-| `api_url` | Upload API endpoint URL |
-| `api_key` | Bearer token for Authorization header |
+| Field | Config key | Environment variable |
+|-------|------------|---------------------|
+| API URL | `api_url` | `FILE_TO_URL_API_URL` |
+| API Key | `api_key` | `FILE_TO_URL_API_KEY` |
 
 To update:
 
@@ -89,6 +119,8 @@ file-to-url/
 ├── upload_file.py        # Upload script (urllib, no extra deps)
 ├── setup.py              # Configure API URL and key
 ├── config.template.json  # Template (copied to config.json by setup.py)
+├── install.sh            # One-command installer (macOS / Linux)
+├── install.ps1           # One-command installer (Windows)
 ├── .gitignore            # Prevents config.json from being committed
 └── README.md
 ```

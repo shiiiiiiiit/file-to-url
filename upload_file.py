@@ -10,16 +10,29 @@ import urllib.request
 import urllib.error
 
 
+ENV_API_URL = "FILE_TO_URL_API_URL"
+ENV_API_KEY = "FILE_TO_URL_API_KEY"
+
+
 def get_config_path():
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
 
 def load_config():
     config_path = get_config_path()
-    if not os.path.exists(config_path):
-        return None
-    with open(config_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    if os.path.exists(config_path):
+        with open(config_path, "r", encoding="utf-8") as f:
+            config = json.load(f)
+        if config.get("api_url", "").strip() and config.get("api_key", "").strip():
+            return config
+
+    # Fallback to environment variables
+    env_url = os.environ.get(ENV_API_URL, "").strip()
+    env_key = os.environ.get(ENV_API_KEY, "").strip()
+    if env_url and env_key:
+        return {"api_url": env_url, "api_key": env_key}
+
+    return None
 
 
 def is_configured():
@@ -53,7 +66,7 @@ def build_multipart(files):
 def upload_file(file_path):
     config = load_config()
     if not config:
-        return {"success": False, "error": "Config file not found. Run setup.py first."}
+        return {"success": False, "error": "Not configured. Run setup.py or set FILE_TO_URL_API_URL / FILE_TO_URL_API_KEY env vars."}
 
     api_url = config.get("api_url", "").strip()
     api_key = config.get("api_key", "").strip()
@@ -61,7 +74,7 @@ def upload_file(file_path):
     if not api_url or not api_key:
         return {
             "success": False,
-            "error": "API URL or API key not configured. Run setup.py first.",
+            "error": "API URL or API key not configured. Run setup.py or set FILE_TO_URL_API_URL / FILE_TO_URL_API_KEY env vars.",
         }
 
     file_path = os.path.abspath(file_path)
