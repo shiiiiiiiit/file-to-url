@@ -56,13 +56,13 @@ npx skills add https://github.com/shiiiiiiiit/file-to-url --skill file-to-url -y
 
 # Step 2: Configure API credentials
 # Windows
-python %USERPROFILE%\.claude\skills\file-to-url\setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
+python %USERPROFILE%\.claude\skills\file-to-url\upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
 
 # macOS / Linux
-python ~/.claude/skills/file-to-url/setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
+python ~/.claude/skills/file-to-url/upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
-`setup.py` also reads environment variables as defaults when `--api-url` / `--api-key` flags are omitted.
+`--setup` also reads environment variables as defaults when `--api-url` / `--api-key` flags are omitted.
 
 ### OpenCode
 
@@ -73,10 +73,10 @@ mkdir -p .opencode/commands
 cp SKILL.md .opencode/commands/file-to-url.md
 ```
 
-Then copy `upload_file.py`, `setup.py`, and `config.template.json` alongside it, and run setup:
+Then copy `upload_file.py` alongside it, and run setup:
 
 ```bash
-python .opencode/commands/setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
+python .opencode/commands/upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
 ## Usage
@@ -114,7 +114,7 @@ Config is stored in `config.json` (inside the skill directory). Environment vari
 To update:
 
 ```bash
-python <skill-dir>/setup.py --api-url=<new-url> --api-key=<new-key>
+python <skill-dir>/upload_file.py --setup --api-url=<new-url> --api-key=<new-key>
 ```
 
 ## Project structure
@@ -122,9 +122,8 @@ python <skill-dir>/setup.py --api-url=<new-url> --api-key=<new-key>
 ```
 file-to-url/
 ├── SKILL.md              # Skill definition for AI assistants
-├── upload_file.py        # Upload script (urllib, no extra deps)
-├── setup.py              # Configure API URL and key
-├── config.template.json  # Template (copied to config.json by setup.py)
+├── upload_file.py        # Upload script + --setup for config (urllib, no extra deps)
+├── config.template.json  # Template (copied to config.json by setup)
 ├── install.sh            # One-command installer (macOS / Linux)
 ├── install.ps1           # One-command installer (Windows)
 ├── .gitignore            # Prevents config.json from being committed

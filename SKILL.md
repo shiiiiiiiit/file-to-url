@@ -34,7 +34,7 @@ Then pass the returned URL to the target tool — no need for the user to type `
 
 Before first use, the API endpoint and key must be configured. There are three ways:
 
-### Option A: Environment variables (no setup.py needed)
+### Option A: Environment variables (no config file needed)
 
 Set these environment variables before launching Claude Code:
 
@@ -58,10 +58,10 @@ If not configured, ask the user for:
 Then write the config:
 
 ```powershell
-python SKILL_DIR/setup.py --api-url="<api_url>" --api-key="<api_key>"
+python SKILL_DIR/upload_file.py --setup --api-url="<api_url>" --api-key="<api_key>"
 ```
 
-`setup.py` also reads `FILE_TO_URL_API_URL` / `FILE_TO_URL_API_KEY` env vars as defaults when `--api-url` / `--api-key` flags are omitted.
+`--setup` also reads `FILE_TO_URL_API_URL` / `FILE_TO_URL_API_KEY` env vars as defaults when `--api-url` / `--api-key` flags are omitted.
 
 ### Option C: One-command install + configure
 
@@ -99,8 +99,8 @@ On success, report the URL to the user. On failure, show the error message.
 
 | Error | Cause | Action |
 |-------|-------|--------|
-| Config not found | No config.json and no env vars | Run setup.py or set FILE_TO_URL_API_URL / FILE_TO_URL_API_KEY |
-| API URL/key not configured | config.json has empty values and no env vars | Re-run setup.py or set environment variables |
+| Config not found | No config.json and no env vars | Run `python upload_file.py --setup` or set FILE_TO_URL_API_URL / FILE_TO_URL_API_KEY |
+| API URL/key not configured | config.json has empty values and no env vars | Re-run `python upload_file.py --setup` or set environment variables |
 | File not found | Invalid file path | Verify the path exists |
 | HTTP 4xx/5xx | Server rejected the request | Show status code and response |
 | API code != 00000 | Business logic error | Show code and msg from API |
@@ -111,7 +111,7 @@ On success, report the URL to the user. On failure, show the error message.
 To change the API URL or key, re-run setup:
 
 ```powershell
-python SKILL_DIR/setup.py --api-url="<new_url>" --api-key="<new_key>"
+python SKILL_DIR/upload_file.py --setup --api-url="<new_url>" --api-key="<new_key>"
 ```
 
 This overwrites the existing config. You can also set `FILE_TO_URL_API_URL` and `FILE_TO_URL_API_KEY` environment variables, which take effect when `config.json` is absent or has empty values.

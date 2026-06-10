@@ -36,7 +36,7 @@ bash install.sh --api-url=https://your-api.com/upload --api-key=your-api-key
 
 ### 环境变量
 
-在启动 Claude Code 之前设置 `FILE_TO_URL_API_URL` 和 `FILE_TO_URL_API_KEY`。如果不存在配置文件，技能会在运行时读取它们——无需 `setup.py`。
+在启动 Claude Code 之前设置 `FILE_TO_URL_API_URL` 和 `FILE_TO_URL_API_KEY`。如果不存在配置文件，技能会在运行时读取它们——无需额外配置。
 
 ```bash
 # macOS / Linux
@@ -56,13 +56,13 @@ npx skills add https://github.com/shiiiiiiiit/file-to-url --skill file-to-url -y
 
 # 第 2 步：配置 API 凭据
 # Windows
-python %USERPROFILE%\.claude\skills\file-to-url\setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
+python %USERPROFILE%\.claude\skills\file-to-url\upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
 
 # macOS / Linux
-python ~/.claude/skills/file-to-url/setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
+python ~/.claude/skills/file-to-url/upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
-当省略 `--api-url` / `--api-key` 参数时，`setup.py` 也会读取环境变量作为默认值。
+当省略 `--api-url` / `--api-key` 参数时，`--setup` 也会读取环境变量作为默认值。
 
 ### OpenCode
 
@@ -73,10 +73,10 @@ mkdir -p .opencode/commands
 cp SKILL.md .opencode/commands/file-to-url.md
 ```
 
-然后将 `upload_file.py`、`setup.py` 和 `config.template.json` 复制到同一目录，并运行配置：
+然后将 `upload_file.py` 复制到同一目录，并运行配置：
 
 ```bash
-python .opencode/commands/setup.py --api-url=https://your-api.com/upload --api-key=your-api-key
+python .opencode/commands/upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
 ## 使用
@@ -114,7 +114,7 @@ python .opencode/commands/setup.py --api-url=https://your-api.com/upload --api-k
 更新配置：
 
 ```bash
-python <skill-dir>/setup.py --api-url=<new-url> --api-key=<new-key>
+python <skill-dir>/upload_file.py --setup --api-url=<new-url> --api-key=<new-key>
 ```
 
 ## 项目结构
@@ -122,9 +122,8 @@ python <skill-dir>/setup.py --api-url=<new-url> --api-key=<new-key>
 ```
 file-to-url/
 ├── SKILL.md              # AI 助手的技能定义
-├── upload_file.py        # 上传脚本（urllib，无额外依赖）
-├── setup.py              # 配置 API URL 和密钥
-├── config.template.json  # 模板（由 setup.py 复制为 config.json）
+├── upload_file.py        # 上传脚本 + --setup 配置（urllib，无额外依赖）
+├── config.template.json  # 模板（安装时复制为 config.json）
 ├── install.sh            # 一键安装器（macOS / Linux）
 ├── install.ps1           # 一键安装器（Windows）
 ├── .gitignore            # 防止 config.json 被提交

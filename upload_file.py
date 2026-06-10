@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Upload a local file to a remote service and return the public URL."""
 
+import argparse
 import json
 import sys
 import os
@@ -63,10 +64,19 @@ def build_multipart(files):
     return bytes(body), content_type
 
 
+def save_config(api_url, api_key):
+    """Write api_url and api_key to config.json in the skill directory."""
+    config_path = get_config_path()
+    config = {"api_url": api_url, "api_key": api_key}
+    with open(config_path, "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=2, ensure_ascii=False)
+    return config_path
+
+
 def upload_file(file_path):
     config = load_config()
     if not config:
-        return {"success": False, "error": "Not configured. Run setup.py or set FILE_TO_URL_API_URL / FILE_TO_URL_API_KEY env vars."}
+        return {"success": False, "error": "Not configured. Run: python upload_file.py --setup --api-url=<url> --api-key=<key>"}
 
     api_url = config.get("api_url", "").strip()
     api_key = config.get("api_key", "").strip()
@@ -74,7 +84,7 @@ def upload_file(file_path):
     if not api_url or not api_key:
         return {
             "success": False,
-            "error": "API URL or API key not configured. Run setup.py or set FILE_TO_URL_API_URL / FILE_TO_URL_API_KEY env vars.",
+            "error": "API URL or API key not configured. Run: python upload_file.py --setup --api-url=<url> --api-key=<key>",
         }
 
     file_path = os.path.abspath(file_path)
@@ -124,6 +134,43 @@ def main():
             result["api_key_set"] = bool(config.get("api_key", "").strip())
         print(json.dumps(result, ensure_ascii=False))
         sys.exit(0 if result["configured"] else 1)
+
+    if len(sys.argv) >= 2 and sys.argv[1] == "--setup":
+        parser = argparse.ArgumentParser(
+            description="Configure file-to-url skill with API credentials"
+        )
+        parser.add_argument(
+            "--api-url",
+            default=os.environ.get(ENV_API_URL),
+            help=f"Upload API endpoint URL (env: {ENV_API_URL})",
+        )
+        parser.add_argument(
+            "--api-key",
+            default=os.environ.get(ENV_API_KEY),
+            help=f"API Bearer token (env: {ENV_API_KEY})",
+        )
+        args = parser.parse_args(sys.argv[2:])
+
+        if not args.api_url:
+            print(json.dumps({
+                "success": False,
+                "error": f"--api-url is required (or set {ENV_API_URL} env var)",
+            }, ensure_ascii=False))
+            sys.exit(1)
+        if not args.api_key:
+            print(json.dumps({
+                "success": False,
+                "error": f"--api-key is required (or set {ENV_API_KEY} env var)",
+            }, ensure_ascii=False))
+            sys.exit(1)
+
+        config_path = save_config(args.api_url, args.api_key)
+        print(json.dumps({
+            "success": True,
+            "config_path": config_path,
+            "api_url": args.api_url,
+        }, ensure_ascii=False))
+        sys.exit(0)
 
     if len(sys.argv) < 2:
         print(

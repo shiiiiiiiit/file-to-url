@@ -45,10 +45,17 @@ if [ ! -d "$SKILL_DIR" ]; then
     exit 1
 fi
 
+echo "Configuring API credentials..."
+mkdir -p "$SKILL_DIR"
+cat > "$SKILL_DIR/config.json" <<EOF
+{
+  "api_url": "$API_URL",
+  "api_key": "$API_KEY"
+}
+EOF
+echo "Configuration saved to $SKILL_DIR/config.json"
+
 echo "Cleaning up non-skill files..."
 rm -f "$SKILL_DIR/.gitignore" "$SKILL_DIR/README.md" "$SKILL_DIR/install.sh" "$SKILL_DIR/install.ps1" "$SKILL_DIR/config.template.json" "$SKILL_DIR/setup.py"
-
-echo "Configuring API credentials..."
-python3 "$SKILL_DIR/setup.py" --api-url="$API_URL" --api-key="$API_KEY"
 
 echo "Done! Use /file-to-url <file_path> to upload files."
