@@ -1,6 +1,6 @@
 ---
 name: file-to-url
-description: "Upload a local file to a remote service and get a public URL. Explicit trigger: /file-to-url. Auto-trigger: when a tool/API/MCP requires an http(s) URL but only a local file path is available."
+description: "Upload a local file to a remote service and get a public URL. Explicit trigger: /file-to-url (Claude Code) or $file-to-url (Codex). Auto-trigger: when a tool/API/MCP requires an http(s) URL but only a local file path is available."
 trigger: /file-to-url
 ---
 
@@ -11,7 +11,8 @@ Upload a local file to a remote service and return a public URL.
 ## Usage
 
 ```
-/file-to-url <file_path>
+/file-to-url <file_path>      # Claude Code
+$ file-to-url <file_path>     # Codex
 ```
 
 ## Auto-trigger (intent recognition)
@@ -28,7 +29,7 @@ When you detect such intent, run the upload directly:
 python SKILL_DIR/upload_file.py "<local_file_path>"
 ```
 
-Then pass the returned URL to the target tool — no need for the user to type `/file-to-url` explicitly.
+Then pass the returned URL to the target tool — no need for the user to type `/file-to-url` (Claude Code) or `$file-to-url` (Codex) explicitly.
 
 ## First-time setup
 
@@ -36,7 +37,7 @@ Before first use, the API endpoint and key must be configured. There are three w
 
 ### Option A: Environment variables (no config file needed)
 
-Set these environment variables before launching Claude Code:
+Set these environment variables before launching Claude Code or Codex:
 
 - `FILE_TO_URL_API_URL` — the upload endpoint (e.g. `https://api.example.com/upload`)
 - `FILE_TO_URL_API_KEY` — the Bearer token for authentication
@@ -65,7 +66,7 @@ python SKILL_DIR/upload_file.py --setup --api-url="<api_url>" --api-key="<api_ke
 
 ### Option C: One-command install + configure
 
-Run the install script with parameters (see README).
+Run the install script with parameters (see README). Add `--target codex` to install for Codex instead of Claude Code.
 
 Replace `SKILL_DIR` with the directory containing this skill (where `upload_file.py` resides).
 
@@ -83,6 +84,8 @@ The skill directory is the folder containing this SKILL.md file. Common location
 
 - **Claude Code (Windows):** `C:\Users\<user>\.claude\skills\file-to-url`
 - **Claude Code (macOS/Linux):** `~/.claude/skills/file-to-url`
+- **Codex (Windows):** `C:\Users\<user>\.agents\skills\file-to-url`
+- **Codex (macOS/Linux):** `~/.agents/skills/file-to-url`
 
 You can also locate it by searching for `upload_file.py` alongside this SKILL.md.
 

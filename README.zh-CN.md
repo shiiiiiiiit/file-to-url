@@ -4,11 +4,11 @@
 
 将本地文件上传到远程服务并获取公开 URL。
 
-一个面向 AI 编程助手（Claude Code、OpenCode 等）的技能插件，通过 HTTP POST `multipart/form-data` 将本地文件上传到可配置的 API 端点，然后从响应中返回公开 URL。
+一个面向 AI 编程助手（Claude Code、Codex、OpenCode 等）的技能插件，通过 HTTP POST `multipart/form-data` 将本地文件上传到可配置的 API 端点，然后从响应中返回公开 URL。
 
 ## 安装
 
-### 快速安装（推荐）
+### 快速安装 — Claude Code（推荐）
 
 一条命令完成安装**和**配置：
 
@@ -34,9 +34,27 @@ bash install.sh --api-url=https://your-api.com/upload --api-key=your-api-key
 .\install.ps1 -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'
 ```
 
+### 快速安装 — Codex
+
+同样的脚本，加上 `--target codex`：
+
+**macOS / Linux：**
+
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/main/install.sh) --api-url=https://your-api.com/upload --api-key=your-api-key --target=codex
+```
+
+**Windows (PowerShell)：**
+
+```powershell
+$tmp="$env:TEMP\install-file-to-url.ps1"; iwr -Uri https://raw.githubusercontent.com/shiiiiiiiit/file-to-url/main/install.ps1 -OutFile $tmp; & $tmp -Target codex -ApiUrl 'https://your-api.com/upload' -ApiKey 'your-api-key'; Remove-Item $tmp
+```
+
+技能将安装到 `~/.agents/skills/file-to-url/`。
+
 ### 环境变量
 
-在启动 Claude Code 之前设置 `FILE_TO_URL_API_URL` 和 `FILE_TO_URL_API_KEY`。如果不存在配置文件，技能会在运行时读取它们——无需额外配置。
+在启动 Claude Code 或 Codex 之前设置 `FILE_TO_URL_API_URL` 和 `FILE_TO_URL_API_KEY`。如果不存在配置文件，技能会在运行时读取它们。
 
 ```bash
 # macOS / Linux
@@ -79,19 +97,33 @@ cp SKILL.md .opencode/commands/file-to-url.md
 python .opencode/commands/upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
 ```
 
+### Codex — 手动安装
+
+```bash
+# 第 1 步：创建技能目录并复制文件
+mkdir -p ~/.agents/skills/file-to-url
+cp SKILL.md upload_file.py ~/.agents/skills/file-to-url/
+
+# 第 2 步：配置 API 凭据
+python ~/.agents/skills/file-to-url/upload_file.py --setup --api-url=https://your-api.com/upload --api-key=your-api-key
+```
+
+Codex 会自动从 `~/.agents/skills/` 发现技能——无需额外注册。
+
 ## 使用
 
 在 AI 助手中输入：
 
 ```
-/file-to-url path/to/your/file.png
+/file-to-url path/to/your/file.png     # Claude Code
+$ file-to-url path/to/your/file.png    # Codex
 ```
 
 助手将上传文件并返回公开 URL。
 
 ### 意图识别
 
-此技能也支持自动触发——当 AI 助手检测到工具、MCP 或 API 需要一个 `http`/`https` URL，但用户只有本地文件时（例如：生图 MCP 需要传入参考图片的 URL），助手会自动通过此技能上传本地文件，将返回的 URL 传入目标工具，无需用户显式输入 `/file-to-url` 命令。
+此技能也支持自动触发——当 AI 助手检测到工具、MCP 或 API 需要一个 `http`/`https` URL，但用户只有本地文件时（例如：生图 MCP 需要传入参考图片的 URL），助手会自动通过此技能上传本地文件，将返回的 URL 传入目标工具，无需用户显式输入 `/file-to-url`（Claude Code）或 `$file-to-url`（Codex）命令。
 
 ## API 契约
 
